@@ -1,4 +1,4 @@
-// File: C:\Users\Anup\.gemini\antigravity\scratch\aapnexa-next\app\layout.jsx
+// File: C:\Users\Manas Yadav\Downloads\aapnexa-next\aapnexa-next\app\layout.jsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

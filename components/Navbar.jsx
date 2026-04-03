@@ -91,8 +91,20 @@ function NavbarContent() {
         setShowMoreMenu(false);
       }
     };
+    const handleEscapeKey = (e) => {
+      if (e.key === 'Escape') {
+        setShowCart(false);
+        setShowSidebar(false);
+        setShowAccountMenu(false);
+        setShowMoreMenu(false);
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
   }, []);
 
   useEffect(() => {
@@ -231,21 +243,21 @@ function NavbarContent() {
   const statusMap = getTranslation(lang, 'status') || {};
 
   return (
-    <>
+    <div className="">
       <style>{`
         .navbar-wrap { position: sticky; top: 0; z-index: 100; transform: translateY(0); transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s; will-change: transform; backface-visibility: hidden; }
         .navbar-wrap.hidden { transform: translateY(-100%); }
         .navbar-wrap.scrolled .navbar { box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-bottom: 0px; }
         .logo-text { font-family: var(--font-serif); font-weight: 800; font-size: 26px; color: #111; letter-spacing: -0.5px; }
-        .nav-search input { font-family: var(--font-main) !important; border:none; outline:none; flex:1; padding:0 15px; font-size:15px; height:48px; }
-        .nav-search-container { display:flex; align-items:stretch; background:#fff; border-radius:8px; overflow:hidden; border:2px solid #0f172a; width:100%; height:48px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
-        .search-cat-wrapper { position: relative; display: flex; align-items: center; background: #f3f3f3; border-right: 1px solid #ddd; padding-right: 25px; }
-        .search-cat-select { background:transparent; border:none; padding:0 10px 0 15px; font-size:13px; fontWeight:700; color:#444; cursor:pointer; outline:none; height:100%; appearance:none; -webkit-appearance:none; width: auto; z-index: 2; position: relative; }
-        .search-cat-wrapper i { position: absolute; right: 10px; font-size: 10px; color: #666; pointer-events: none; z-index: 1; }
+        .nav-search input { font-family: var(--font-main) !important; border:none; outline:none; flex:1; padding: clamp(8px, 1.2vw, 15px); font-size: clamp(12px, 1.3vw, 15px); height: clamp(40px, 8vw, 48px); }
+        .nav-search-container { display:flex; align-items:stretch; background:#fff; border-radius: clamp(6px, 1vw, 8px); overflow:hidden; border:2px solid #0f172a; width:100%; height: clamp(40px, 8vw, 48px); box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .search-cat-wrapper { position: relative; display: flex; align-items: center; background: #f3f3f3; border-right: 1px solid #ddd; padding-right: clamp(12px, 2vw, 25px); minWidth: clamp(50px, 12vw, 80px); }
+        .search-cat-select { background:transparent; border:none; padding: 0 clamp(6px, 1vw, 10px) 0 clamp(8px, 1.5vw, 15px); font-size: clamp(11px, 1.2vw, 13px); fontWeight:700; color:#444; cursor:pointer; outline:none; height:100%; appearance:none; -webkit-appearance:none; width: auto; z-index: 2; position: relative; }
+        .search-cat-wrapper i { position: absolute; right: clamp(6px, 1vw, 10px); font-size: 10px; color: #666; pointer-events: none; z-index: 1; }
         .search-cat-wrapper:hover { background:#e3e3e3; }
-        .search-go-btn { background:#febd69; border:none; width:55px; display:flex; align-items:center; justify-content:center; cursor:pointer; height:100%; transition:background 0.2s; }
+        .search-go-btn { background:#febd69; border:none; width: clamp(40px, 9vw, 55px); display:flex; align-items:center; justify-content:center; cursor:pointer; height:100%; transition:background 0.2s; }
         .search-go-btn:hover { background:#f3a847; }
-        .search-go-btn i { color:#111; font-size:20px; }
+        .search-go-btn i { color:#111; font-size: clamp(14px, 2.5vw, 20px); }
         
         /* Sidebar & Global Toggle */
         .nav-all-btn { display: flex; align-items: center; gap: 8px; padding: 0 15px; color: #fff; font-weight: 700; cursor: pointer; border: 1px solid transparent; transition: all 0.2s; height: 100%; font-size: 14px; }
@@ -290,6 +302,13 @@ function NavbarContent() {
         .nav-account-btn:hover { background: #f1f5f9; }
 
         @media (max-width: 640px) {
+          .search-cat-wrapper { display: none; }
+          .nav-search-container { border-radius: 6px; height: 40px; }
+          .nav-search input { font-size: 12px !important; padding: 0 10px !important; }
+          .search-go-btn { width: 40px; }
+          .search-go-btn i { font-size: 14px; }
+        }
+        @media (max-width: 768px) {
           .mobile-bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; z-index: 990; background: #050505; padding: 10px 0 env(safe-area-inset-bottom, 10px); box-shadow: 0 -10px 30px rgba(0,0,0,0.3); }
           .mob-nav-item { flex: 1; display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:rgba(255,255,255,0.4);font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all 0.2s; }
           .mob-nav-item.active { color:var(--color-gold); }
@@ -303,19 +322,19 @@ function NavbarContent() {
         .desktop-cart-badge { position: absolute; top: 2px; left: 24px; background: #ff9900; color: #0f172a; font-size: 10px; font-weight: 900; height: 18px; min-width: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3); }
       `}</style>
 
-      <div className={`navbar-wrap${navHidden ? ' hidden' : ''}${navScrolled ? ' scrolled' : ''}`}>
+      <div className={`navbar-wrap${navHidden ? ' hidden' : ''}${navScrolled ? ' scrolled' : ''} `}>
         <div className="promo-bar">
           <div className="promo-track">
             {getTranslation(lang, 'promo')} &nbsp;&nbsp;|&nbsp;&nbsp; {getTranslation(lang, 'promo')}
           </div>
         </div>
-        <nav className="navbar">
+        <nav className="navbar ">
           <Link href="/" className="logo-container">
             <img src="/logo.png" alt="Aapnexa Logo" />
             <span className="logo-text">Aapnexa</span>
           </Link>
           
-          <div ref={searchWrapperRef} style={{ flexGrow: 1, maxWidth: '800px', margin: '0 40px', position: 'relative' }}>
+          <div ref={searchWrapperRef} className="nav-search-wrapper" style={{ flexGrow: 1, maxWidth: 'clamp(280px, 80vw, 800px)', margin: '0 clamp(12px, 2vw, 40px)', position: 'relative' }}>
             <form className="nav-search" onSubmit={(e) => {
               e.preventDefault();
               if (searchQuery.trim()) {
@@ -323,18 +342,18 @@ function NavbarContent() {
                 router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
               }
             }} style={{ position: 'relative', width:'100%' }}>
-              <div className="nav-search-container">
-                <div className="search-cat-wrapper">
+              <div className="nav-search-container" style={{ display:'flex', alignItems:'stretch', background:'#fff', borderRadius: 'clamp(6px, 1vw, 8px)', overflow:'hidden', border:'2px solid #0f172a', width:'100%', height: 'clamp(40px, 8vw, 48px)', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' }}>
+                <div className="search-cat-wrapper" style={{ position: 'relative', display: 'flex', alignItems: 'center', background: '#f3f3f3', borderRight: '1px solid #ddd', paddingRight: 'clamp(12px, 2vw, 25px)', minWidth: 'clamp(50px, 12vw, 80px)' }}>
                   <select className="search-cat-select" defaultValue="all" onChange={(e) => {
                     if (e.target.value === 'all') router.push('/products');
                     else router.push(`/products?category=${e.target.value}`);
-                  }}>
+                  }} style={{ background:'transparent', border:'none', padding:'0 clamp(6px, 1vw, 10px) 0 clamp(8px, 1.5vw, 15px)', fontSize: 'clamp(11px, 1.2vw, 13px)', fontWeight:700, color:'#444', cursor:'pointer', outline:'none', height:'100%', appearance:'none', WebkitAppearance:'none', width: 'auto', zIndex: 2, position: 'relative' }}>
                     <option value="all">All</option>
                     {['jeans','tshirts','roundneck','shirts','pants','lowers','blazers','hoodies','bermuda','jackets','electronics','sale'].map(cat => (
                       <option key={cat} value={cat}>{getTranslation(lang, 'categories')[cat] || cat.toUpperCase()}</option>
                     ))}
                   </select>
-                  <i className="fa-solid fa-caret-down"></i>
+                  <i className="fa-solid fa-caret-down" style={{ position: 'absolute', right: 'clamp(6px, 1vw, 10px)', fontSize: '10px', color: '#666', pointerEvents: 'none', zIndex: 1 }}></i>
                 </div>
                 <input
                   type="text" name="search"
@@ -343,18 +362,19 @@ function NavbarContent() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onFocus={() => setIsSearchFocused(true)}
+                  style={{ fontFamily: 'var(--font-main)', border:'none', outline:'none', flex:1, padding: '0 clamp(10px, 1.5vw, 15px)', fontSize: 'clamp(12px, 1.3vw, 15px)', height:'100%' }}
                 />
-                <button type="submit" className="search-go-btn">
+                <button type="submit" className="search-go-btn" style={{ background:'#febd69', border:'none', width: 'clamp(40px, 9vw, 55px)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', height:'100%', transition:'background 0.2s', fontSize: 'clamp(14px, 2.5vw, 20px)', color:'#111', flex: '0 0 auto' }}>
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </button>
               </div>
             </form>
 
             {isSearchFocused && searchQuery.trim().length > 0 && (
-              <div style={{ position:'absolute', top:'100%', left:0, right:0, marginTop:8, background:'#fff', borderRadius:16, boxShadow:'0 10px 40px rgba(0,0,0,0.1)', border:'1px solid #f3f4f6', overflow:'hidden', zIndex:1000, animation:'modalPop 0.2s ease' }}>
+              <div style={{ position:'absolute', top:'100%', left:0, right:0, marginTop: 'clamp(4px, 1vw, 8px)', background:'#fff', borderRadius: 'clamp(12px, 2vw, 16px)', boxShadow:'0 10px 40px rgba(0,0,0,0.1)', border:'1px solid #f3f4f6', overflow:'hidden', zIndex:1000, animation:'modalPop 0.2s ease', maxHeight: 'clamp(250px, 60vh, 400px)' }}>
                 {searchResults.length > 0 ? (
-                  <div style={{ maxHeight:400, overflowY:'auto' }}>
-                    <div style={{ padding:'12px 16px', background:'#f8fafc', fontSize:11, fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing:1, borderBottom:'1px solid #f1f5f9' }}>
+                  <div style={{ maxHeight: 'clamp(250px, 60vh, 400px)', overflowY:'auto' }}>
+                    <div style={{ padding: 'clamp(8px, 1.5vw, 12px) clamp(12px, 2vw, 16px)', background:'#f8fafc', fontSize: 'clamp(9px, 1vw, 11px)', fontWeight:700, color:'#64748b', textTransform:'uppercase', letterSpacing: 'clamp(0.5px, 0.2vw, 1px)', borderBottom:'1px solid #f1f5f9' }}>
                       {getTranslation(lang, 'searchSuggested')}
                     </div>
                     {searchResults.map((product) => (
@@ -362,21 +382,21 @@ function NavbarContent() {
                         key={product.id} 
                         href={`/product/${product.id}`}
                         onClick={() => { setIsSearchFocused(false); setSearchQuery(''); }}
-                        style={{ display:'flex', alignItems:'center', gap:12, padding:'12px 16px', borderBottom:'1px solid #f1f5f9', cursor:'pointer', textDecoration:'none', transition:'background 0.1s' }}
+                        style={{ display:'flex', alignItems:'center', gap: 'clamp(8px, 1.5vw, 12px)', padding: 'clamp(10px, 1.5vw, 12px) clamp(12px, 2vw, 16px)', borderBottom:'1px solid #f1f5f9', cursor:'pointer', textDecoration:'none', transition:'background 0.1s' }}
                         onMouseEnter={(e) => e.currentTarget.style.background = '#f8fafc'}
                         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
                       >
-                        <img src={product.image || product.imageUrl || product.img || "https://placehold.co/100"} alt={product.name} style={{ width:40, height:40, borderRadius:8, objectFit:'cover', background:'#f1f5f9' }} />
-                        <div style={{ flex:1, overflow:'hidden' }}>
-                          <div style={{ fontSize:14, fontWeight:600, color:'#111', whiteSpace:'nowrap', textOverflow:'ellipsis', overflow:'hidden' }}>{product.name}</div>
-                          <div style={{ fontSize:12, color:'#6b7280', marginTop:2 }}>{getTranslation(lang, 'categories')[product.category?.toLowerCase()] || product.category}</div>
+                        <img src={product.image || product.imageUrl || product.img || "https://placehold.co/100"} alt={product.name} style={{ width: 'clamp(32px, 6vw, 40px)', height: 'clamp(32px, 6vw, 40px)', borderRadius:8, objectFit:'cover', background:'#f1f5f9', flexShrink: 0 }} />
+                        <div style={{ flex:1, overflow:'hidden', minWidth: 0 }}>
+                          <div style={{ fontSize: 'clamp(12px, 1.3vw, 14px)', fontWeight:600, color:'#111', whiteSpace:'nowrap', textOverflow:'ellipsis', overflow:'hidden' }}>{product.name}</div>
+                          <div style={{ fontSize: 'clamp(10px, 1vw, 12px)', color:'#6b7280', marginTop:2, whiteSpace:'nowrap', textOverflow:'ellipsis', overflow:'hidden' }}>{getTranslation(lang, 'categories')[product.category?.toLowerCase()] || product.category}</div>
                         </div>
-                        <div style={{ fontSize:14, fontWeight:800, color:'#f59e0b' }}>₹{parseFloat(product.price).toLocaleString('en-IN')}</div>
+                        <div style={{ fontSize: 'clamp(12px, 1.3vw, 14px)', fontWeight:800, color:'#f59e0b', flexShrink: 0 }}>₹{parseFloat(product.price).toLocaleString('en-IN')}</div>
                       </Link>
                     ))}
                     <div 
                       onClick={() => { setIsSearchFocused(false); router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`); }}
-                      style={{ padding:'12px 16px', textAlign:'center', color:'#6366f1', fontSize:13, fontWeight:600, cursor:'pointer', background:'#f8fafc' }}
+                      style={{ padding: 'clamp(10px, 1.5vw, 12px) clamp(12px, 2vw, 16px)', textAlign:'center', color:'#6366f1', fontSize: 'clamp(12px, 1.2vw, 13px)', fontWeight:600, cursor:'pointer', background:'#f8fafc' }}
                       onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'}
                       onMouseLeave={(e) => e.currentTarget.style.background = '#f8fafc'}
                     >
@@ -384,35 +404,35 @@ function NavbarContent() {
                     </div>
                   </div>
                 ) : (
-                  <div style={{ padding:'30px 20px', textAlign:'center', color:'#6b7280' }}>
-                    <div style={{ fontSize:24, marginBottom:8 }}>🔍</div>
-                    <div style={{ fontSize:14, fontWeight:600 }}>{getTranslation(lang, 'searchNone')}</div>
-                    <div style={{ fontSize:12, marginTop:4 }}>{getTranslation(lang, 'searchTry')}</div>
+                  <div style={{ padding: 'clamp(20px, 4vw, 30px) clamp(12px, 2vw, 20px)', textAlign:'center', color:'#6b7280' }}>
+                    <div style={{ fontSize: 'clamp(18px, 4vw, 24px)', marginBottom:8 }}>🔍</div>
+                    <div style={{ fontSize: 'clamp(12px, 1.3vw, 14px)', fontWeight:600 }}>{getTranslation(lang, 'searchNone')}</div>
+                    <div style={{ fontSize: 'clamp(11px, 1vw, 12px)', marginTop:4 }}>{getTranslation(lang, 'searchTry')}</div>
                   </div>
                 )}
               </div>
             )}
           </div>
           
-          <div className="nav-icons" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <div className="cart-icon-wrapper" onClick={() => setShowCart(true)}>
+          <div className="nav-icons" style={{ display: 'flex', alignItems: 'center', gap: 'clamp(8px, 1.5vw, 20px)', flexWrap: 'nowrap', minWidth: 'auto' }}>
+            <div className="cart-icon-wrapper" onClick={() => setShowCart(true)} style={{ display: 'flex', alignItems: 'center', gap: 'clamp(4px, 1vw, 8px)', cursor: 'pointer', position:'relative', padding: 'clamp(6px, 1vw, 10px)', borderRadius: 'clamp(8px, 1.5vw, 12px)', transition: 'all 0.2s', flexShrink: 0 }}>
               <div style={{ position:'relative' }}>
-                <i className="fa-solid fa-cart-shopping"></i>
+                <i className="fa-solid fa-cart-shopping" style={{ fontSize: 'clamp(18px, 3vw, 22px)' }}></i>
                 <span className="desktop-cart-badge" id="cart-count" style={{ display: cartCount > 0 ? 'flex' : 'none' }}>{cartCount}</span>
               </div>
-              <span className="cart-text">{getTranslation(lang, 'cart')}</span>
+              <span className="cart-text" style={{ fontSize: 'clamp(11px, 1.2vw, 14px)', fontWeight: 800, color:'#0f172a', whiteSpace: 'nowrap' }}>{getTranslation(lang, 'cart')}</span>
             </div>
             
             {user ? (
-              <div ref={accountRef} style={{ position: 'relative' }}>
-                <div className="nav-account-btn" onClick={() => setShowAccountMenu(!showAccountMenu)} onMouseEnter={() => setShowAccountMenu(true)}>
-                  <div style={{ width:32, height:32, borderRadius:'50%', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'white', display:'flex', alignItems:'center', justifyContent:'center', fontSize:14, fontWeight:800, boxShadow:'0 2px 8px rgba(99,102,241,0.25)' }}>
+              <div ref={accountRef} style={{ position: 'relative', flexShrink: 0 }}>
+                <div className="nav-account-btn" onClick={() => setShowAccountMenu(!showAccountMenu)} onMouseEnter={() => setShowAccountMenu(true)} style={{ display: 'flex', alignItems: 'center', gap: 'clamp(4px, 1vw, 8px)', cursor: 'pointer', padding: 'clamp(6px, 1vw, 8px)', borderRadius: 'clamp(8px, 1.5vw, 10px)', transition: 'all 0.2s', position: 'relative', flexWrap: 'nowrap', minWidth: 0 }}>
+                  <div style={{ width: 'clamp(28px, 5vw, 32px)', height: 'clamp(28px, 5vw, 32px)', borderRadius:'50%', background: 'linear-gradient(135deg,#6366f1,#8b5cf6)', color:'white', display:'flex', alignItems:'center', justifyContent:'center', fontSize: 'clamp(12px, 1.5vw, 14px)', fontWeight:800, boxShadow:'0 2px 8px rgba(99,102,241,0.25)', flexShrink: 0 }}>
                     {user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase()}
                   </div>
-                  <div style={{ fontSize:14, fontWeight:800, color:'#1e293b', maxWidth:100, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+                  <div style={{ fontSize: 'clamp(11px, 1.2vw, 14px)', fontWeight:800, color:'#1e293b', maxWidth: 'clamp(70px, 12vw, 100px)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
                     {user.displayName ? user.displayName.split(' ')[0] : 'Account'}
                   </div>
-                  <i className={`fa-solid fa-chevron-down`} style={{ fontSize:10, color:'#94a3b8', transition:'transform 0.2s', transform: showAccountMenu ? 'rotate(180deg)' : 'none' }}></i>
+                  <i className={`fa-solid fa-chevron-down`} style={{ fontSize: 'clamp(8px, 1vw, 10px)', color:'#94a3b8', transition:'transform 0.2s', transform: showAccountMenu ? 'rotate(180deg)' : 'none', flexShrink: 0 }}></i>
                 </div>
 
                 {showAccountMenu && (
@@ -446,28 +466,28 @@ function NavbarContent() {
               </div>
             ) : (
               <Link href="/login" style={{ 
-                fontSize: '14px', fontWeight: '800', background:'#0f172a', color:'white', 
-                padding:'10px 24px', borderRadius:11, textDecoration:'none', transition:'all 0.2s',
-                boxShadow:'0 4px 12px rgba(15,23,42,0.15)', display:'flex', alignItems:'center', gap:10
+                fontSize: 'clamp(11px, 1.2vw, 14px)', fontWeight: '800', background:'#0f172a', color:'white', 
+                padding:'clamp(8px, 1.5vw, 10px) clamp(12px, 2vw, 24px)', borderRadius: 'clamp(8px, 1.5vw, 11px)', textDecoration:'none', transition:'all 0.2s',
+                boxShadow:'0 4px 12px rgba(15,23,42,0.15)', display:'flex', alignItems:'center', gap: 'clamp(6px, 1vw, 10px)', whiteSpace: 'nowrap', flexShrink: 0
               }}>
-                <i className="fa-regular fa-circle-user" style={{ fontSize:18 }}></i>
+                <i className="fa-regular fa-circle-user" style={{ fontSize: 'clamp(14px, 2.5vw, 18px)' }}></i>
                 {getTranslation(lang, 'login')}
               </Link>
             )}
 
-            <div ref={moreRef} style={{ position: 'relative' }}>
+            <div ref={moreRef} style={{ position: 'relative', flexShrink: 0 }}>
                <div 
                  className="nav-more-btn" 
                  onClick={() => setShowMoreMenu(!showMoreMenu)} 
                  onMouseEnter={() => setShowMoreMenu(true)}
-                 style={{ display:'flex', alignItems:'center', gap:6, cursor:'pointer', padding:'8px 12px', borderRadius:10, transition:'all 0.2s' }}
+                 style={{ display:'flex', alignItems:'center', gap: 'clamp(4px, 1vw, 6px)', cursor:'pointer', padding: 'clamp(6px, 1vw, 8px) clamp(8px, 1.5vw, 12px)', borderRadius: 'clamp(8px, 1.5vw, 10px)', transition:'all 0.2s' }}
                >
-                  <span style={{ fontSize:14, fontWeight:800, color:'#1e293b' }}>{getTranslation(lang, 'navMore')}</span>
-                  <i className={`fa-solid fa-chevron-down`} style={{ fontSize:10, color:'#94a3b8', transition:'transform 0.2s', transform: showMoreMenu ? 'rotate(180deg)' : 'none' }}></i>
+                  <span style={{ fontSize: 'clamp(11px, 1.2vw, 14px)', fontWeight:800, color:'#1e293b', whiteSpace: 'nowrap' }}>{getTranslation(lang, 'navMore')}</span>
+                  <i className={`fa-solid fa-chevron-down`} style={{ fontSize: 'clamp(8px, 1vw, 10px)', color:'#94a3b8', transition:'transform 0.2s', transform: showMoreMenu ? 'rotate(180deg)' : 'none', flexShrink: 0 }}></i>
                </div>
 
                {showMoreMenu && (
-                 <div className="account-dropdown more" onMouseLeave={() => setShowMoreMenu(false)} style={{ minWidth:220 }}>
+                 <div className="account-dropdown more" onMouseLeave={() => setShowMoreMenu(false)} style={{ minWidth: 'clamp(180px, 80vw, 220px)' }}>
                     <Link href="/track" className="account-item" onClick={() => setShowMoreMenu(false)}>
                        <i className="fa-solid fa-truck-fast" style={{ width:16 }}></i> {getTranslation(lang, 'trackOrder')}
                     </Link>
@@ -545,7 +565,7 @@ function NavbarContent() {
       <i className={`fa-solid fa-xmark sidebar-close ${showSidebar ? 'show' : ''}`} onClick={() => setShowSidebar(false)}></i>
 
       {showCart && <div className="cart-overlay" onClick={() => setShowCart(false)}></div>}
-      <div className={`cart-drawer ${showCart ? 'open' : ''}`}>
+      <div className={`cart-drawer${showCart ? ' open' : ''}`}>
         <div className="cart-drawer-header">
           <h2>{getTranslation(lang, 'cart')} ({cartCount})</h2>
           <button className="close-cart-btn" onClick={() => setShowCart(false)}>&times;</button>
@@ -590,15 +610,15 @@ function NavbarContent() {
                 <button onClick={handleRemoveCoupon} style={{ background:'none', border:'none', color:'#6b7280', fontSize:18, cursor:'pointer', lineHeight:1 }}>×</button>
               </div>
             ) : (
-              <div style={{ display:'flex', gap:6 }}>
-                <input
-                  type="text" value={couponInput} onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(''); }}
-                  onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
-                  placeholder={getTranslation(lang, 'couponPlaceholder')}
-                  style={{ flex:1, padding:'9px 12px', border:'1.5px solid #e2e8f0', borderRadius:8, fontSize:13, fontFamily:'Inter,sans-serif', outline:'none', letterSpacing:0.5 }}
-                />
-                <button onClick={handleApplyCoupon} style={{ padding:'9px 14px', background:'#111', color:'#fff', border:'none', borderRadius:8, fontSize:12, fontWeight:700, cursor:'pointer', whiteSpace:'nowrap', fontFamily:'Inter,sans-serif' }}>{getTranslation(lang, 'apply')}</button>
-              </div>
+                <div className="cart-coupon-form" style={{ display:'flex', gap:6 }}>
+                  <input
+                    type="text" value={couponInput} onChange={e => { setCouponInput(e.target.value.toUpperCase()); setCouponError(''); }}
+                    onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
+                    placeholder={getTranslation(lang, 'couponPlaceholder')}
+                    style={{ flex:1, padding:'clamp(6px, 1.5vw, 9px) clamp(8px, 1.5vw, 12px)', border:'1.5px solid #e2e8f0', borderRadius:8, fontSize:'clamp(11px, 1.2vw, 13px)', fontFamily:'Inter,sans-serif', outline:'none', letterSpacing:0.5, minWidth: 0 }}
+                  />
+                  <button onClick={handleApplyCoupon} style={{ padding:'clamp(6px, 1.5vw, 9px) clamp(10px, 2vw, 14px)', background:'#111', color:'#fff', border:'none', borderRadius:8, fontSize:'clamp(11px, 1.2vw, 12px)', fontWeight:700, cursor:'pointer', whiteSpace:'nowrap', fontFamily:'Inter,sans-serif', flexShrink: 0 }}>{getTranslation(lang, 'apply')}</button>
+                </div>
             )}
           </div>
           {appliedCoupon && (
@@ -640,7 +660,7 @@ function NavbarContent() {
           {user ? (user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() ? getTranslation(lang, 'admin') : 'Account') : getTranslation(lang, 'login')}
         </Link>
       </nav>
-    </>
+    </div>
   );
 }
 
