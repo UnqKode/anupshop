@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"app\\\\product\\\\[id]\\\\page.jsx -> ../../../components/RecentlyViewed\":{\"id\":\"app\\\\product\\\\[id]\\\\page.jsx -> ../../../components/RecentlyViewed\",\"files\":[\"static/chunks/_app-pages-browser_components_RecentlyViewed_jsx.js\"]}}"
